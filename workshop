@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIでLP＆HPを作成・修正・公開できるようになるワークショップ</title>
+    <style>
+        /* ベーススタイル */
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3 {
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            background: linear-gradient(transparent 60%, #ffff66 60%);
+            font-weight: bold;
+        }
+
+        /* セクションごとのスタイル */
+        section {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        section:nth-child(even) {
+            background-color: #f4f7f6;
+        }
+
+        /* ヒーローセクション（ファーストビュー） */
+        .hero {
+            background-color: #1a365d;
+            color: #fff;
+            text-align: left; /* 基本を左揃えに変更 */
+            padding: 80px 20px;
+        }
+        .hero .hero-catch {
+            font-size: 36px; /* キャッチコピーを最も大きく */
+            font-weight: bold;
+            color: #ffff66; /* 目立つイエローに */
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .hero .hero-sub {
+            font-size: 24px; /* サブコピーのサイズに調整 */
+            font-weight: normal;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* 導入セクション */
+        .intro-section {
+            background-color: #f4f7f6;
+            text-align: left; /* 中央揃えを解除して左揃えに統一 */
+            padding: 80px 0 60px;
+        }
+        .intro-section .lead-strong {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .intro-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .intro-section .lead-red {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e53e3e;
+            margin-top: 40px;
+            line-height: 1.6;
+        }
+
+        /* 見出しスタイル */
+        .section-title {
+            text-align: center; /* 見出しは中央揃えに戻す */
+            font-size: 24px;
+            color: #1a365d;
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+
+        /* CTAボタン */
+        .cta-button-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #e53e3e;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #c53030;
+        }
+
+        /* 開催概要テーブル */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .info-table th, .info-table td {
+            border: 1px solid #cbd5e0;
+            padding: 15px;
+            text-align: left;
+        }
+        .info-table th {
+            background-color: #edf2f7;
+            width: 30%;
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 600px) {
+            .hero .hero-catch { font-size: 24px; }
+            .hero .hero-sub { font-size: 20px; }
+            .hero p { font-size: 16px; }
+            section { padding: 40px 0; }
+            .cta-button { padding: 15px 30px; font-size: 18px; width: 80%; box-sizing: border-box; }
+            .info-table th, .info-table td { display: block; width: 100%; }
+            .info-table th { border-bottom: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ファーストビュー -->
+    <header class="hero">
+        <div class="container">
+            <!-- キャッチコピー（ワークショップ名）を一番目立たせる -->
+            <h1 class="hero-catch">AIでLP＆HPを作成・修正・公開できるようになるワークショップ</h1>
+            
+            <!-- サブコピー -->
+            <h2 class="hero-sub">外注しなくても、<br>LPやHPを自分で作って、<br>自分で直して、公開できるようになる。</h2>
+            
+            <!-- 新しい短いサブキャッチ -->
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 30px; line-height: 1.6;">
+                作って終わり、ではありません。<br>
+                知識ゼロからでも、公開と「その後の修正」まで自分でできる状態を目指す、超・実践型ワークショップ。
+            </p>
+            
+            <div class="cta-button-container">
+                <a href="https://create-future.jp/p/r/2mmdQw77" class="cta-button" target="_blank" rel="noopener noreferrer">初回開催に申し込む</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 導入セクション（FVから外した文章を活かす） -->
+    <section class="intro-section">
+        <div class="container">
+            <p class="lead-strong">制作会社に頼めば、ページ制作は普通にお金がかかります。<br>しかも本当に地味に重いのは、その後です。</p>
+            <p>文言を変えたい。<br>画像を差し替えたい。<br>少し順番を整えたい。</p>
+            <p>そんな修正のたびに、また依頼して、またお金がかかって、反映も待つことになる。</p>
+            <p>このワークショップでは、AIを使ってLPやHPのたたき台を作り、実際に公開し、あとから自分で修正できる状態まで進めます。</p>
+            <p class="lead-red">知識だけ聞いて終わる講座ではありません。<br>自分で作成・修正・公開できる状態を目指す、実践型ワークショップです。</p>
+        </div>
+    </section>
+
+    <!-- 悩みセクション -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">こんな悩みはありませんか？</h2>
+            <p>LPやHPを作りたい気持ちはある。でも、</p>
+            <ul>
+                <li>制作会社に頼むと、普通に数十万円かかる</li>
+                <li>HPも安く作って20万円前後、内容によっては100万円前後かかることもある</li>
+                <li>作って終わりではなく、修正のたびにまたお金がかかる</li>
+                <li>しかも、依頼してから反映まで時間がかかる</li>
+                <li>画像や文章を少し変えたいだけでも、自分では動かせない</li>
+                <li>自分で作れたらいいけれど、何から始めればいいのか分からない</li>
+                <li>企画はあるのに、ページが形にならない</li>
+            </ul>
+            <p>この状態になっていませんか？</p>
+            <p>実際、多くの方が止まるのは、LPやHPの必要性が分からないからではありません。必要なのは分かっている。でも、外注すると高い。しかも、自分では作れない。ここで止まっているんです。</p>
+        </div>
+    </section>
+
+    <!-- 放っておくとどうなるか -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">放っておくとどうなるか</h2>
+            <p>この状態をそのままにしていると、せっかく頭の中にある企画も、商品の魅力も、伝えたい内容も、ずっと「ページにならないまま」残り続けます。</p>
+            <p>そのたびに、</p>
+            <ul>
+                <li>そのうち作ろう</li>
+                <li>もう少し整ってから出そう</li>
+                <li>外注できるタイミングで頼もう</li>
+            </ul>
+            <p>こうして、出せるはずのものが出せないままになります。</p>
+            <p>しかも外注前提だと、最初の制作費だけでなく、その後の修正のたびにもお金と時間がかかります。文言を少し変えたい、画像を差し替えたい、順番を少し整えたい。そのたびにまた確認、依頼、修正待ちです。</p>
+            <p><span class="highlight">だからこそ今必要なのは、最初から完璧なLPやHPを作ることではありません。</span></p>
+            <p>まず、自分で1本作れて、公開できて、必要な修正を自分でできるようになること。ここが大きな分岐点になります。</p>
+        </div>
+    </section>
+
+    <!-- なぜ今か -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">なぜ今、この方法が大きな武器になるのか？</h2>
+            <p>少し前まで、LPやHPを自分で作るというのは、多くの人にとって現実的ではありませんでした。コードが分からない。デザインも難しい。ページ構成も分からない。公開方法も分からない。だから、結局は制作会社や制作者に頼るしかなかったんです。</p>
+            <p>ですが、今は違います。<br><strong>AIを使えば、LPやHPのたたき台をかなり早く作れる時代になりました。</strong></p>
+            <p>つまり、ページ作成そのもののハードルは、以前より大きく下がっています。<br>ただし、ここで大事なのは、<strong>「AIを使えばそれだけで全部うまくいくわけではない」</strong>ということです。</p>
+            <p>たたき台は作れても、</p>
+            <ul>
+                <li>どう整えるのか</li>
+                <li>どう公開するのか</li>
+                <li>どう修正するのか</li>
+            </ul>
+            <p>この部分で止まる人が多い。</p>
+            <p>だから今回のワークショップでは、ただAIで出力するだけではなく、<span class="highlight">「LPやHPを自分で形にし、公開し、その後も自分で動かせるようになること」</span>に集中します。</p>
+        </div>
+    </section>
+
+    <!-- 学べること -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">このワークショップで学べること</h2>
+            <p>今回のワークショップで扱うのは、難しい専門知識の詰め込みではありません。大事なのは、自分でLPやHPを形にし、公開し、あとから自分で直せるようになることです。</p>
+            <p>そのために、ワークショップでは主に次のことを扱います。</p>
+
+            <h3>1. LP・HPを自分で作るための全体像</h3>
+            <p>まず最初に、どういう順番でページを作り、どういう形で公開するのか。全体像を整理します。</p>
+
+            <h3>2. AIを使ってLP・HPのたたき台を作る方法</h3>
+            <p>何をAIに伝えれば、ページの土台が出るのか。ここをできるだけ分かりやすく整理します。</p>
+
+            <h3>3. 画像・文言を差し替えてページとして整える方法</h3>
+            <p>AIで出しただけでは終わりません。実際に使える形に近づけるために、画像や文章を入れ替えながら整えていきます。</p>
+
+            <h3>4. 公開する方法</h3>
+            <p>作ったページを実際にインターネット上に公開します。今回はGitHub Pagesを使って、できるだけシンプルに、できるだけ早く公開まで進める流れで行います。</p>
+
+            <h3>5. 公開後に自分で修正できる状態にする方法</h3>
+            <p>あとから文言や画像を変えたいとき、どこを見ればいいのか。簡単な修正が自分でできる状態を目指します。</p>
+        </div>
+    </section>
+
+    <!-- どんな変化が起きるのか -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">このワークショップで、どんな変化が起きるのか？</h2>
+            <p>このワークショップに参加した後、目指すのは単なる知識の理解ではありません。<br>目指すのは、<strong>「作りたいけれど出せない」状態から抜けること</strong>です。</p>
+            <p>たとえば、</p>
+            <ul>
+                <li>LPやHPを作る流れが分かる</li>
+                <li>AIを使ってページのたたき台を出せる</li>
+                <li>公開まで自分で進められる</li>
+                <li>あとから自分で簡単な修正ができる</li>
+                <li>外注しないと動けない状態から抜けやすくなる</li>
+            </ul>
+            <p>こうした変化が起きてきます。これはかなり大きいです。なぜなら、自分で出せるようになると、企画の出し方も、商品の動かし方も、修正のスピードも変わるからです。</p>
+            <p>思いついたことを、ずっと頭の中に置いたままにせず、形にして出せるようになる。この差は、想像以上に大きいはずです。</p>
+        </div>
+    </section>
+
+    <!-- 価値 -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">なぜ、この内容にそこまで価値があるのか？</h2>
+            <p>おそらく、ここまで読んでくださった方の中には、「LPやHPを自作して公開することに、そこまで価値があるのか？」と感じる方もいるかもしれません。</p>
+            <p>ですが実際には、LPやHPを制作会社に依頼しようとすると、普通に費用がかかります。LP制作は、内容によっては数十万円かかることも珍しくありません。HP制作も、安く作って20万円前後、内容や依頼先によっては100万円前後かかることもあります。</p>
+            <p>しかも本当に負担になるのは、最初の制作費だけではありません。あとから、</p>
+            <ul>
+                <li>文言を少し変えたい</li>
+                <li>画像を差し替えたい</li>
+                <li>順番を変えたい</li>
+                <li>セクションを追加したい</li>
+            </ul>
+            <p>こうした修正が出るたびに、また依頼をして、確認をして、反映を待つ必要があります。つまり、お金だけではなく、修正のたびに時間も止まりやすいんです。</p>
+            <p>だからこそ、今回のワークショップの価値は、単に1ページ作ることではありません。<span class="highlight">これから先も、自分で作れる・公開できる・修正できる状態を手に入れること。</span>ここにあります。</p>
+            <p>自分で直せれば、</p>
+            <ul>
+                <li>思いついたときにすぐ変えられる</li>
+                <li>外注待ちにならない</li>
+                <li>修正費をそのたびに払わなくていい</li>
+                <li>LPにもHPにも応用できる</li>
+            </ul>
+            <p>この差はかなり大きいはずです。色々学ぶより先に、まず1本出せるようになること。そして、その後も自分で動かせるようになること。そこを越えるだけでも、今後の動き方はかなり変わってきます。</p>
+        </div>
+    </section>
+
+    <!-- 対象者 -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">こんな方に向いています</h2>
+            <ul>
+                <li>LPやHPを作りたいけれど、自分では止まってしまう方</li>
+                <li>制作会社に頼む前に、まず自分で形にしたい方</li>
+                <li>外注コストを減らしたい方</li>
+                <li>公開後の修正を自分でできるようになりたい方</li>
+                <li>商品案内ページ、申込みページ、簡易的なホームページを自分で持ちたい方</li>
+                <li>AIを活用しながら、ページ作成をもっとラクにしたい方</li>
+            </ul>
+            <p>逆に、</p>
+            <ul>
+                <li>売れるLPの設計やコピーまで全部学びたい</li>
+                <li>マーケティング全体の導線設計まで一気にやりたい</li>
+            </ul>
+            <p>という場合は、今回の内容とは少し違います。<br>今回はあくまで、<strong>自分でページを作成・修正・公開できるようになること</strong>に集中しています。</p>
+
+            <h3>少人数で行う理由</h3>
+            <p>このワークショップは、最大10名までの少人数制で行います。理由はシンプルです。</p>
+            <p>この内容は、大人数に向けて一方的に話して終わる形だと、結局「分かったつもり」で終わりやすいからです。実際には、どこで止まるか、何が分からないか、どこを直せば進むか、ここが人によって違います。</p>
+            <p>だからこそ、人数を増やしすぎず、詰まりやすいポイントを押さえながら進めます。</p>
+        </div>
+    </section>
+
+    <!-- 開催概要 -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">開催概要</h2>
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th>講座名</th>
+                        <td>AIでLP＆HPを作成・修正・公開できるようになるワークショップ</td>
+                    </tr>
+                    <tr>
+                        <th>形式</th>
+                        <td>オンライン</td>
+                    </tr>
+                    <tr>
+                        <th>時間</th>
+                        <td>4時間</td>
+                    </tr>
+                    <tr>
+                        <th>人数</th>
+                        <td>最大10名</td>
+                    </tr>
+                    <tr>
+                        <th>参加費</th>
+                        <td>
+                            通常予定価格 250,000円（税込）<br>
+                            <strong>初回開催価格 148,000円（税込）</strong><br>
+                            <span style="font-size: 14px;">※初回は受講後のご感想・受講者の声のご協力をお願いしています。</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>今回の参加費について</h3>
+            <p>今回のワークショップは、今後は通常価格250,000円での開催を予定しています。ただ、今回は初回開催です。</p>
+            <p>そのため、内容をさらに磨いていくこと、受講後のご感想や受講者の声を今後の開催に活かしていくことを前提に、<strong>初回開催価格 148,000円（税込）</strong>でご案内しています。</p>
+            <p>もちろん、安い金額ではありません。ですが、だからこそ、単に情報を聞いて終わるのではなく、<span class="highlight">自分でLPやHPを作って公開できるようになること</span>にしっかり集中していただきたいと思っています。</p>
+            <p>外注しないと動けない状態から抜けたい方にとっては、この価格は決して高すぎるものではないはずです。</p>
+        </div>
+    </section>
+
+    <!-- 最後に -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">最後に</h2>
+            <p>LPやHPを作るたびに、外注する。待つ。修正を頼む。また止まる。</p>
+            <p>この流れを、ずっと続ける必要はありません。<br>もちろん、本格的な設計や強いコピーが必要な場面では、上流からしっかり作るべきケースもあります。ですが、その前に。</p>
+            <p><strong>まずは、自分で1本出せるようになること。</strong><br>ここを越えるだけで、動けることが一気に増えます。</p>
+            <p>もし今、<br>「作りたいけれど、自分では止まってしまう」<br>「外注に頼りきりなのを変えたい」<br>「自分で作って、自分で直して、自分で公開できるようになりたい」<br>そう思っているなら、このワークショップはかなり役に立つはずです。</p>
+            <p>今回の内容は、売れるLPの設計やコピーまで全部を扱うものではありません。ですが、だからこそ、<strong>自分でページを作成・修正・公開する</strong>という最初の大きな壁を越えることに集中できます。</p>
+            <p>その一歩を、自分の手で越えたい方は、ぜひ今回ご参加ください。</p>
+
+            <div class="cta-button-container" id="apply">
+                <!-- ▼ 申し込みリンク先のURLを設定しました ▼ -->
+                <a href="https://create-future.jp/p/r/2mmdQw77" class="cta-button" target="_blank" rel="noopener noreferrer">初回開催に申し込む</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
