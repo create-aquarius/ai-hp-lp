@@ -1,0 +1,444 @@
+import React, { useState, useEffect } from 'react';
+
+// --- アイコンSVGコンポーネント (lucide-reactの代用) ---
+const ChevronRight = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>
+);
+const CheckCircle2 = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+);
+const Activity = ({ className, strokeWidth = 2 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+);
+const Heart = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+);
+const ShieldCheck = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-2 7-2 2.5 0 4.5 1 6.5 2a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+);
+const MapPin = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 15.007 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+);
+const CalendarCheck = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M8 2v4"/><path d="M16 2v4"/><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M3 10h18"/><path d="m16 20 2 2 4-4"/></svg>
+);
+
+// --- 棒グラフコンポーネント ---
+const AgeMuscleChart = () => {
+  const data = [
+    { age: 20, val: 8, color: '#0d9488' },   // teal-600
+    { age: 30, val: 9, color: '#0d9488' },
+    { age: 40, val: 8, color: '#0d9488' },
+    { age: 50, val: -5, color: '#d6d3d1' },  // stone-300
+    { age: 60, val: -10, color: '#a8a29e' }, // stone-400
+    { age: 70, val: -18, color: '#f87171' }, // red-400
+    { age: 80, val: -25, color: '#dc2626' }, // red-600
+  ];
+
+  const maxVal = 10;
+  const minVal = -30;
+  const range = maxVal - minVal;
+  const svgHeight = 250;
+  const zeroY = svgHeight * (maxVal / range); // 0のY座標
+
+  return (
+    <div className="relative w-full max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+      <div className="text-sm font-bold text-stone-500 mb-2">(変化率)</div>
+      
+      {/* 吹き出し */}
+      <div className="absolute top-4 right-0 md:-right-8 bg-white border-4 border-red-500 text-red-600 font-bold p-3 rounded-3xl rounded-br-none shadow-lg z-10 animate-bounce">
+        <p className="text-center leading-tight">
+          筋肉量が<br/>落ちる前から<br/>対策が必要
+        </p>
+        <div className="absolute -bottom-5 right-0 w-8 h-8 text-red-500">
+          <svg viewBox="0 0 100 100" fill="currentColor">
+            <path d="M100,0 L0,100 L100,100 Z" />
+          </svg>
+        </div>
+      </div>
+
+      <svg viewBox={`0 0 400 ${svgHeight}`} className="w-full h-auto overflow-visible">
+        {/* 目盛り線 */}
+        {[10, 0, -10, -20, -30].map((tick) => {
+          const y = zeroY - (tick / range) * svgHeight;
+          return (
+            <g key={tick}>
+              <line x1="40" y1={y} x2="400" y2={y} stroke="#e5e5e5" strokeWidth="1" />
+              <text x="30" y={y + 4} fontSize="12" fill="#78716c" textAnchor="end">{tick}</text>
+            </g>
+          );
+        })}
+        
+        {/* 棒グラフ */}
+        {data.map((d, i) => {
+          const x = 60 + i * 48;
+          const isPositive = d.val >= 0;
+          const h = Math.abs((d.val / range) * svgHeight);
+          const y = isPositive ? zeroY - h : zeroY;
+
+          return (
+            <g key={d.age}>
+              <rect x={x} y={y} width="24" height={h} fill={d.color} rx="2" />
+              <text x={x + 12} y={svgHeight + 20} fontSize="14" fill="#1c1917" fontWeight="bold" textAnchor="middle">{d.age}</text>
+            </g>
+          );
+        })}
+
+        {/* X軸の線 */}
+        <line x1="40" y1={svgHeight} x2="400" y2={svgHeight} stroke="#78716c" strokeWidth="2" />
+        <text x="390" y={svgHeight + 20} fontSize="12" fill="#78716c">(年齢)</text>
+
+        {/* 矢印（低下を強調） */}
+        <path d="M 170 50 Q 250 50 300 120" fill="none" stroke="#fca5a5" strokeWidth="20" strokeLinecap="round" opacity="0.6"/>
+        <polygon points="280,110 320,100 310,140" fill="#fca5a5" opacity="0.6"/>
+      </svg>
+      <div className="text-right text-xs text-stone-400 mt-6">※グラフはイメージです</div>
+    </div>
+  );
+};
+
+// --- レーダーチャートコンポーネント ---
+const RadarChart = ({ data, color, fillColor }) => {
+  const size = 200;
+  const center = size / 2;
+  const radius = size * 0.42; // サイズを少し大きく調整
+
+  // 角度の定義 (上: -90, 左下: 150, 右下: 30)
+  const angles = [-Math.PI / 2, (5 * Math.PI) / 6, Math.PI / 6];
+
+  const getPoint = (val, angleIndex) => {
+    const r = radius * (val / 100);
+    const x = center + r * Math.cos(angles[angleIndex]);
+    const y = center + r * Math.sin(angles[angleIndex]);
+    return `${x},${y}`;
+  };
+
+  // データのポリゴン
+  const polygonPoints = `${getPoint(data.posture, 0)} ${getPoint(data.fat, 1)} ${getPoint(data.health, 2)}`;
+  
+  // 背景の五角形（今回は三角形）のグリッド線
+  const gridLevels = [0.25, 0.5, 0.75, 1];
+
+  return (
+    <div className="relative w-full max-w-[350px] aspect-square flex items-center justify-center bg-white p-2 mx-auto">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full drop-shadow-sm">
+        {/* グリッド描画 */}
+        {gridLevels.map((level, idx) => (
+          <polygon
+            key={idx}
+            points={`${center + radius * level * Math.cos(angles[0])},${center + radius * level * Math.sin(angles[0])} 
+                     ${center + radius * level * Math.cos(angles[1])},${center + radius * level * Math.sin(angles[1])} 
+                     ${center + radius * level * Math.cos(angles[2])},${center + radius * level * Math.sin(angles[2])}`}
+            fill="none"
+            stroke="#e5e5e5"
+            strokeWidth="1"
+          />
+        ))}
+        {/* 軸の線 */}
+        {angles.map((angle, idx) => (
+          <line
+            key={`axis-${idx}`}
+            x1={center}
+            y1={center}
+            x2={center + radius * Math.cos(angle)}
+            y2={center + radius * Math.sin(angle)}
+            stroke="#e5e5e5"
+            strokeWidth="1"
+          />
+        ))}
+
+        {/* データのポリゴン */}
+        <polygon points={polygonPoints} fill={fillColor} stroke={color} strokeWidth="2" fillOpacity="0.7" />
+      </svg>
+      
+      {/* ラベル */}
+      <div className="absolute top-2 md:top-4 left-1/2 -translate-x-1/2 text-sm md:text-base font-bold text-stone-600">姿勢改善</div>
+      <div className="absolute bottom-6 md:bottom-8 left-2 md:left-6 text-sm md:text-base font-bold text-stone-600">肥満解消</div>
+      <div className="absolute bottom-6 md:bottom-8 right-2 md:right-6 text-sm md:text-base font-bold text-stone-600">不調改善</div>
+    </div>
+  );
+};
+
+
+const App = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const CtaButton = ({ className = '', text = '簡単5分で今すぐ無料カウンセリングに参加！', arrow = true }) => (
+    <button className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-orange-500 to-orange-400 p-4 px-8 font-bold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-orange-500/30 ${className}`}>
+      <span className="relative z-10 flex items-center justify-center w-full gap-2 text-sm sm:text-base md:text-lg">
+        {text}
+        {arrow && <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />}
+      </span>
+    </button>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#fafaf9] font-sans text-stone-800 pb-24 md:pb-0">
+      
+      {/* 追従ヘッダー */}
+      <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${isScrolled ? 'bg-white/95 py-3 shadow-md backdrop-blur-md' : 'bg-transparent py-5'}`}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
+          <div className="text-2xl font-black tracking-tighter text-teal-600">
+            Aruquel<span className="text-stone-800">.lab</span>
+          </div>
+          <div className="hidden md:block">
+            <button className="rounded-full bg-orange-500 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-orange-600 shadow-md">
+              無料カウンセリング
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* ヒーローセクション */}
+      <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden bg-stone-100 pt-20">
+        <div className="absolute inset-0 z-0">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=2000" alt="ウォーキングする女性" className="h-full w-full object-cover object-center opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent"></div>
+        </div>
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6">
+          <div className="max-w-2xl">
+            <div className="mb-4 inline-block rounded-full bg-teal-100 px-4 py-1.5 text-sm font-bold text-teal-700 shadow-sm">
+              今だけ限定！無料カウンセリング実施中
+            </div>
+            <h1 className="mb-6 font-serif text-4xl font-bold leading-tight text-stone-800 sm:text-5xl md:text-6xl">
+              美しいボディラインは<br />
+              <span className="text-teal-600">正しい歩き方</span>から。
+            </h1>
+            <p className="mb-8 text-lg leading-relaxed text-stone-600 sm:text-xl font-medium">
+              専門スタジオであなたの歩行バランスを詳細に分析！<br className="hidden sm:block" />
+              あなた専用のパーソナル・プログラムを作成します。
+            </p>
+            <CtaButton className="w-full sm:w-auto" />
+          </div>
+        </div>
+      </section>
+
+      {/* グラフ入り お悩み・原因セクション */}
+      <section className="bg-white py-20 border-b-8 border-teal-600">
+        <div className="mx-auto max-w-4xl px-6">
+          
+          <div className="text-center mb-16">
+            <h2 className="text-2xl md:text-4xl font-black text-teal-600 mb-2">
+              筋力の低下は<span className="text-4xl md:text-6xl mx-2 border-b-4 border-yellow-400">40代</span>から始まり、
+            </h2>
+            <div className="bg-red-700 text-white py-4 px-6 inline-block transform -skew-x-6 shadow-lg">
+              <h3 className="text-2xl md:text-4xl font-bold transform skew-x-6">
+                50歳頃から急激に筋肉量が低下↓します
+              </h3>
+            </div>
+          </div>
+
+          <div className="mb-20">
+            <AgeMuscleChart />
+          </div>
+
+          <div className="text-center space-y-6">
+            <h3 className="text-3xl md:text-4xl font-black text-stone-800">
+              筋肉量が落ちると、<br className="md:hidden" />
+              <span className="text-red-600">ためこみボディ</span>になってしまいます
+            </h3>
+            <p className="text-lg text-stone-600 leading-relaxed max-w-2xl mx-auto font-medium">
+              今までと同じように生活しているのにスタイルが崩れやすくなってきた方は、基礎代謝の大部分を占める骨格筋が落ちているサインです。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* レーダーチャート入り 比較セクション */}
+      <section className="bg-stone-100 py-24">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="text-center mb-16 bg-teal-600 text-white py-6 rounded-lg shadow-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+            <h2 className="text-2xl md:text-3xl font-bold relative z-10">
+              たるみ改善だけじゃない<span className="text-yellow-300 ml-2">✨</span><br className="md:hidden"/>
+              <span className="text-xl md:text-2xl opacity-90 block mt-2">姿勢UP / 更年期対策！</span>
+            </h2>
+          </div>
+
+          <div className="space-y-12">
+            
+            {/* 通常のジム */}
+            <div>
+              <div className="bg-black text-yellow-500 font-bold text-xl inline-block px-6 py-2 mb-0 shadow-lg">
+                通常のパーソナルジム
+              </div>
+              <div className="flex flex-col md:flex-row bg-white border-4 border-black shadow-xl">
+                <div className="w-full md:w-1/2 p-4 md:p-6 flex justify-center items-center">
+                  <RadarChart data={{ posture: 20, fat: 90, health: 30 }} color="#d97706" fillColor="#fbbf24" />
+                </div>
+                <div className="w-full md:w-1/2 bg-black text-white p-8 flex items-center">
+                  <p className="leading-relaxed font-medium">
+                    通常のパーソナルジムだと、短期間で肥満解消が行える分、不調が生じやすく、厳しい食事制限により、肌荒れなどが発生してしまうことも多い。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 下向き矢印 */}
+            <div className="flex justify-center -my-4 relative z-20">
+              <div className="w-0 h-0 border-l-[30px] border-l-transparent border-r-[30px] border-r-transparent border-t-[40px] border-t-stone-300 drop-shadow-md"></div>
+            </div>
+
+            {/* Aruquelの場合 */}
+            <div>
+              <div className="flex justify-between items-end mb-0">
+                <div className="bg-teal-600 text-white font-bold text-xl inline-block px-6 py-2 shadow-lg">
+                  Aruquelの場合
+                </div>
+                <div className="text-teal-600 font-black text-xl italic mr-4">Aruquel</div>
+              </div>
+              <div className="flex flex-col md:flex-row bg-white border-4 border-teal-600 shadow-2xl relative z-10">
+                <div className="w-full md:w-1/2 p-4 md:p-6 flex justify-center items-center">
+                  <RadarChart data={{ posture: 85, fat: 60, health: 80 }} color="#10b981" fillColor="#a7f3d0" />
+                </div>
+                <div className="w-full md:w-1/2 bg-teal-600 text-white p-8 flex items-center">
+                  <p className="leading-loose font-medium">
+                    肥満解消には特化していないが、歩行を通して、体幹づくり、カラダの使い方を学び、<strong className="bg-yellow-400 text-black px-1 mx-1">筋肉を土台から活性化させるため、不調改善にも効き、</strong>長期の体型維持につながる。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* こだわりセクション */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="mb-16 text-center text-3xl font-bold text-stone-800 md:text-4xl">
+            Aruquelの<span className="text-teal-600">こだわり</span>
+          </h2>
+
+          <div className="space-y-20">
+            {/* こだわり 1 */}
+            <div className="flex flex-col items-center gap-12 md:flex-row">
+              <div className="w-full md:w-1/2">
+                <div className="overflow-hidden rounded-2xl shadow-xl">
+                  <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000" alt="トレーニング" className="h-[300px] w-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 md:pl-10">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-teal-100 px-4 py-1 text-sm font-bold text-teal-700">
+                  <CheckCircle2 className="h-4 w-4" /> POINT 01
+                </div>
+                <h3 className="mb-6 text-2xl font-bold">洗練された独自トレーニングメソッド</h3>
+                <p className="text-lg text-stone-600 leading-relaxed">専用のコンパクトなツールを使い、自宅で正確なトレーニングが可能に。毎日の習慣化をサポートします。</p>
+              </div>
+            </div>
+
+            {/* こだわり 2 */}
+            <div className="flex flex-col items-center gap-12 md:flex-row-reverse">
+              <div className="w-full md:w-1/2">
+                <div className="overflow-hidden rounded-2xl shadow-xl">
+                  <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&q=80&w=1000" alt="足圧測定" className="h-[300px] w-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 md:pr-10">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-teal-100 px-4 py-1 text-sm font-bold text-teal-700">
+                  <CheckCircle2 className="h-4 w-4" /> POINT 02
+                </div>
+                <h3 className="mb-6 text-2xl font-bold">歩き方の癖が見える科学的分析</h3>
+                <p className="text-lg text-stone-600 leading-relaxed">
+                  高精度なセンサーを用いて足の裏にかかる圧力を測定。体をバランス良く使った正しい歩き方ができているか、最先端のシステムと専門家が科学的に分析します。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 継続力セクション（復元） */}
+      <section className="bg-teal-50 py-24">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+            他のサービスが続かなかったあなたに。<br />
+            Aruquelは<span className="text-teal-600">「続けやすさ」</span>を追求しました。
+          </h2>
+          
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {[
+              { step: 1, title: "自宅で手軽に実践", desc: "専用ツールが自宅にあるから、わざわざ通う手間なく隙間時間でトレーニングの習慣がつきます。", icon: MapPin },
+              { step: 2, title: "数値で見える変化", desc: "スタジオでも自宅でも、アプリを通じて努力の成果が数値化されるためモチベーションが維持できます。", icon: Activity },
+              { step: 3, title: "定期的なプロの確認", desc: "月に数回、専門家とオンラインまたはスタジオで進捗チェック。変化が目に見えて実感できます。", icon: CalendarCheck }
+            ].map((item, idx) => (
+              <div key={idx} className="relative rounded-2xl bg-white p-8 pt-12 shadow-sm">
+                <div className="absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-teal-500 text-xl font-bold text-white shadow-lg">
+                  {item.step}
+                </div>
+                <item.icon className="mx-auto mb-4 h-10 w-10 text-teal-300" />
+                <h3 className="mb-3 text-xl font-bold text-stone-800">{item.title}</h3>
+                <p className="text-stone-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ボトムCTAセクション（復元） */}
+      <section className="relative bg-stone-900 py-24 text-center">
+        <div className="absolute inset-0 z-0 opacity-20">
+          <img
+            src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=2000"
+            alt="笑顔の女性"
+            className="h-full w-full object-cover object-center"
+          />
+        </div>
+        <div className="relative z-10 mx-auto max-w-4xl px-6">
+          <h2 className="mb-6 text-3xl font-bold text-white md:text-5xl">
+            今だけ限定！<br className="md:hidden" />
+            <span className="text-teal-400">無料カウンセリング</span>実施中！
+          </h2>
+          <p className="mb-10 text-lg text-stone-300">
+            姿勢と歩き方を改善して、<br className="hidden md:block" />
+            いつまでも美しく健やかな自分を目指しませんか？
+          </p>
+          <CtaButton className="text-lg md:text-xl md:px-12 md:py-5" />
+        </div>
+      </section>
+
+      {/* フッター */}
+      <footer className="bg-stone-900 text-stone-400 py-12 pb-32 md:pb-12 text-center md:text-left">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-2xl font-black tracking-tighter text-teal-500">Aruquel<span className="text-stone-300">.lab</span></div>
+          <div className="flex gap-6 text-sm">
+            <a href="#" className="hover:text-white transition-colors">運営会社</a>
+            <a href="#" className="hover:text-white transition-colors">利用規約</a>
+          </div>
+          <div className="text-sm">&copy; 2026 Aruquel lab.</div>
+        </div>
+      </footer>
+
+      {/* スマホ用 追従CTAバナー（ボトム固定） */}
+      <div className={`fixed bottom-0 left-0 w-full z-50 transition-transform duration-500 ${isScrolled ? 'translate-y-0' : 'translate-y-full md:translate-y-0'}`}>
+        <div className="bg-teal-600 p-3 md:p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+          <div className="max-w-4xl mx-auto flex justify-center">
+            <button className="group relative flex items-center justify-center w-full md:w-auto overflow-hidden rounded-full bg-gradient-to-r from-orange-500 to-orange-400 p-2 md:p-3 px-6 font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02]">
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-center justify-center bg-white text-orange-500 rounded-full w-12 h-12 md:w-14 md:h-14 font-black leading-none border-2 border-orange-500 shrink-0">
+                  <span className="text-[10px] md:text-xs">簡単</span>
+                  <span className="text-lg md:text-xl -mt-1">5<span className="text-xs">分で</span></span>
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs md:text-sm font-medium">今すぐ</span>
+                  <span className="text-base md:text-lg lg:text-xl tracking-tight">無料カウンセリングに参加！</span>
+                </div>
+                <ChevronRight className="h-6 w-6 ml-2 md:ml-4 animate-pulse shrink-0" />
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
